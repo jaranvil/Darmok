@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_below="@+id/textView"
+android:layout_toRightOf="@+id/btnMap"
+android:layout_toEndOf="@+id/btnMap">
+
+    <TextView
+        android:text="Welcome to"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView19"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:textSize="14dp"
+        android:layout_marginTop="0dp"
+        android:background="#444444"
+        android:gravity="center_horizontal"
+        android:paddingTop="30dp" />
+
+    <TextView android:text="Project Darmok" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#00ffff"
+        android:textSize="26dp"
+        android:layout_marginTop="0dp"
+        android:background="#444444"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:paddingBottom="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login with exsisting account"
+        android:id="@+id/textView9"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etUser"
+        android:layout_gravity="center_horizontal"
+        android:background="#444444"
+        android:hint="Username"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:layout_marginTop="0dp"
+        android:textColor="#cccccc" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etPass"
+        android:layout_gravity="center_horizontal"
+        android:background="#444444"
+        android:hint="Password"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:password="true"
+        android:textColor="#cccccc" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:text="Login"
+        android:id="@+id/btnMap"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#444444"
+        android:textSize="22dp"
+        android:textColor="#cccccc" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Need an account?"
+        android:id="@+id/textView18"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="42dp"
+        android:text="Request an Invite"
+        android:id="@+id/btnRequest"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#444444"
+        android:textSize="22dp"
+        android:textColor="#cccccc" />
+
+</LinearLayout>
+

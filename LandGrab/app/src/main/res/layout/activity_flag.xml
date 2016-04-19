@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/textView"
+    android:layout_toRightOf="@+id/btnMap"
+    android:layout_toEndOf="@+id/btnMap">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView19"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:textSize="14dp"
+        android:layout_marginTop="0dp"
+        android:background="#444444"
+        android:gravity="center_horizontal"
+        android:paddingTop="30dp" />
+
+    <TextView android:text="Draw Your Flag" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#00ffff"
+        android:textSize="26dp"
+        android:layout_marginTop="0dp"
+        android:background="#444444"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:paddingBottom="30dp" />
+
+    <com.nscc.jared.biz.FlagCanvas
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:id="@+id/flagCanvas"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>
+

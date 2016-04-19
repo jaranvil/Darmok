@@ -1,0 +1,334 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MapActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.jared.ag_framework.MapsActivity"
+        android:layout_margin="0dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="4dp"
+            android:background="#000099">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:id="@+id/tvUsername"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btnAbout"
+                android:background="@android:drawable/ic_menu_info_details"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btnEdit"
+                android:background="@android:drawable/ic_menu_edit"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="visible" />
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btnFlag"
+                android:background="@android:drawable/ic_menu_edit"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#000099">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="supporters"
+                android:id="@+id/tvSupporters"
+                android:layout_marginLeft="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#800000"
+            android:padding="4dp"
+            android:layout_gravity="center_horizontal|top"
+            android:alpha="0.7"
+            android:id="@+id/NoticeLayout"
+            android:visibility="gone">
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="No user accounts yet. Any user can drop and remove photos."
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#80000000">
+
+
+            <LinearLayout
+                android:id="@+id/row1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:text="Local Cells"
+                        android:id="@+id/btnZoom2"
+                        android:background="#3399ff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:text="Local Area"
+                        android:id="@+id/btnZoom1"
+                        android:background="#000099"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLoadingPhotos"
+        android:layout_gravity="left|bottom"
+        android:textColor="#000000"
+        android:textSize="26dp"
+        android:layout_marginBottom="30dp" />
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:baselineAligned="true"
+        android:id="@+id/lyInfoView"
+        android:visibility="gone"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Project Darmok"
+                android:id="@+id/textView4"
+                android:textColor="#4d6cfa"
+                android:textStyle="bold"
+                android:textSize="34dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_alignTop="@+id/imageView2"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:lines="2"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is the very first test release! Next features: web map, user leveling, alliances, borders"
+                android:id="@+id/textView5"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Recruit supporters in your current cell"
+            android:id="@+id/textView6"
+            android:textColor="#000000"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Place those supporters in other cells"
+            android:id="@+id/textView12"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- The user with the most supporters in a cell controls that cell"
+            android:id="@+id/textView13"
+            android:textColor="#000000" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView4"
+                android:layout_gravity="center_vertical" />
+
+
+        </LinearLayout>
+
+
+
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Okay"
+            android:id="@+id/btnOkay"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#000099"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[ chat with nearby players here ]"
+            android:id="@+id/textView2"
+            android:layout_gravity="center"
+            android:gravity="center|center_horizontal"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="Location Inaccurate"
+        android:id="@+id/tvLoading"
+        android:layout_gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical|center_horizontal"
+        android:alpha="0.5"
+        android:background="#444444"
+        android:visibility="gone" />
+
+</FrameLayout>
