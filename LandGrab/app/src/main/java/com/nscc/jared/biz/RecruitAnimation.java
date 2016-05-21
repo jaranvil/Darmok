@@ -9,11 +9,19 @@ import android.view.View;
 
 import com.nscc.jared.landgrab.R;
 
+import java.util.ArrayList;
+
 public class RecruitAnimation extends View
 {
     private Context context;
     private Paint paint;
-    private int cellSize = 40;
+    public ArrayList<String> usernames = new ArrayList<>();
+    public ArrayList<Integer> supporters = new ArrayList<>();
+    public boolean done = false;
+
+    private int[] colors = {Color.parseColor("#0000cc"), Color.parseColor("#009933"), Color.parseColor("#990000"), Color.parseColor("#9900cc"), Color.parseColor("#996633"), Color.parseColor("#009933"), Color.parseColor("#0000cc")};
+    private int counter = 0;
+    private int speed = 60;
 
     public RecruitAnimation(Context c, AttributeSet attrs)
     {
@@ -26,12 +34,61 @@ public class RecruitAnimation extends View
     @Override
     public void onDraw(Canvas c)
     {
+        counter += speed;
         c.drawColor(Color.BLACK);
 
-        //border
-        paint.setColor(Color.CYAN);
-        paint.setStyle(Paint.Style.STROKE);
-        c.drawRect(0, 0, this.getWidth(), this.getHeight(), paint);
+        int canvasHeight = this.getHeight();
+
+        if (usernames != null)
+        {
+            // find sum of support
+            double total = 0;
+            for (int i = 0; i < supporters.size();i++)
+            {
+                total += supporters.get(i);
+            }
+
+            // draw each support
+            int lastBottom = 0;
+            for (int i = 0;i < usernames.size();i++)
+            {
+                if (i < colors.length-1)
+                {
+                    double supportAmount = supporters.get(i);
+                    double _height = (supportAmount/total) * canvasHeight;
+                    int height = (int) _height;
+                    int amount = (int) supportAmount;
+                    int intTotal = (int) total;
+                    float percent = amount * 100f / intTotal;
+
+                    //adjust height for drawing
+                    if (counter < height)
+                        height = counter;
+
+                    paint.setColor(colors[i]);
+                    c.drawRect(this.getWidth()-100, lastBottom, this.getWidth(), lastBottom + height, paint);
+
+                    if (height > 50)
+                    {
+                        paint.setColor(Color.WHITE);
+                        paint.setTextSize(45);
+                        c.drawText(usernames.get(i) + " ("+Math.round(percent)+"%)", 10, lastBottom + (height / 2), paint);
+                    }
+
+                    lastBottom += height;
+                }
+                else
+                    break;
+
+            }
+        }
+
+
+
+
+
+
+
 
 //        paint.setTextSize(52);
 //        paint.setColor(Color.WHITE);

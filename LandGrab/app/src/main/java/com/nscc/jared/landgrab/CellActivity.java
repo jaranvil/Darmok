@@ -9,19 +9,25 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nscc.jared.biz.RecruitAnimation;
+import com.nscc.jared.biz.XPTriggers;
 import com.nscc.jared.data.AddSupportData;
 import com.nscc.jared.data.ObjectManager;
+import com.nscc.jared.data.UserDataAccess;
 
 import org.w3c.dom.Text;
 
@@ -29,6 +35,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
+
 
 public class CellActivity extends Activity {
 
@@ -39,6 +46,7 @@ public class CellActivity extends Activity {
     private TextView tvName;
     private TextView tvLandName;
     private TextView tvUsername;
+    private TextView tvUsername2;
     private TextView tvPlayer;
     private TextView tvSupport;
     private TextView tvNoSupport;
@@ -46,12 +54,16 @@ public class CellActivity extends Activity {
     private ListView lvSupportList;
     private Button btnRecruit;
     private Button btnAddSupport;
+    private Button btnAddSupport2;
     private TextView tvOwnerSupport;
     private TextView tvPlayerSupport;
     private TextView tvSupportAvl;
+    private LinearLayout lyAddSupportPopup;
+    private EditText etSupportInput;
 
     private RecruitAnimation supportCanvas;
-
+    private Handler h;
+    private final int FRAME_RATE = 30;
 
     private Bitmap bmp;
     private String imageUrl;
@@ -76,6 +88,7 @@ public class CellActivity extends Activity {
         tvName = (TextView) findViewById(R.id.tvName);
         tvLandName = (TextView) findViewById(R.id.tvLandName);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
+        tvUsername2 = (TextView) findViewById(R.id.tvUsername2);
         ivThumbnail = (ImageView) findViewById(R.id.ivThumbnail);
         lvSupportList = (ListView) findViewById(R.id.lvSupportList);
         btnRecruit = (Button) findViewById(R.id.btnRecruit);
@@ -83,13 +96,14 @@ public class CellActivity extends Activity {
         tvSupport = (TextView) findViewById(R.id.tvSupport);
         tvNoSupport = (TextView) findViewById(R.id.tvNoSupport);
         btnAddSupport = (Button) findViewById(R.id.btnAddSupport);
+        btnAddSupport2 = (Button) findViewById(R.id.btnAddSupport2);
         tvOwnerSupport = (TextView) findViewById(R.id.tvOwnerSupport);
         tvPlayerSupport = (TextView) findViewById(R.id.tvPlayerSupport);
         tvSupportAvl = (TextView) findViewById(R.id.tvSupportAvl);
+        lyAddSupportPopup = (LinearLayout) findViewById(R.id.addSupportPopup);
+        etSupportInput = (EditText) findViewById(R.id.etSupportInput);
 
         supportCanvas = (RecruitAnimation) findViewById(R.id.SupportCanvas);
-
-        supportCanvas.invalidate();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)//if bundle has content
@@ -128,8 +142,15 @@ public class CellActivity extends Activity {
 
         }
 
-        tvName.setText(lat + ", " + lng);
+        // start supporter drawing
+        supportCanvas.usernames = usernames;
+        supportCanvas.supporters = supporters;
+        h = new Handler();
+        h.postAtTime(r, SystemClock.uptimeMillis() + 400);
+
+        tvName.setText("Location: " + lat + ", " + lng);
         tvUsername.setText(this.username);
+        tvUsername2.setText(this.username);
         if (supporters != null)
             tvOwnerSupport.setText(supporters.get(0)+"");
         tvPlayerSupport.setText(playerSupport+"");
@@ -188,7 +209,12 @@ public class CellActivity extends Activity {
                         editor2.putLong(CELL, unixTime);
                         editor2.apply();
 
-                        finishWithResult(newSupport);
+                        XPTriggers xp = new XPTriggers(sharedpreferences.getInt("user_id", 0), sharedpreferences.getInt("level", 1));
+                        xp.recruit();
+
+                        Toast.makeText(getApplicationContext(), "+" + newSupport + " supporters \t +10 xp", Toast.LENGTH_SHORT).show();
+
+                        finish();
                     }
                 }
                 else
@@ -200,30 +226,63 @@ public class CellActivity extends Activity {
 
         btnAddSupport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                lyAddSupportPopup.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        btnAddSupport2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
                 int currentSupporter = sharedpreferences.getInt("supporters", 0);
 
-                if (currentSupporter > 0)
+                int supportToAdd = Integer.parseInt(etSupportInput.getText().toString());
+
+                if (currentSupporter >= supportToAdd)
                 {
                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putInt("supporters", currentSupporter - 1);
+                    editor.putInt("supporters", currentSupporter - supportToAdd);
                     editor.apply();
 
                     AddSupportData db = new AddSupportData();
-                    db.addSupport(lat, lng, sharedpreferences.getInt("user_id",0), 1);
+                    db.addSupport(lat, lng, sharedpreferences.getInt("user_id", 0), supportToAdd);
 
-                    tvSupportAvl.setText((currentSupporter - 1)+"");
-                    playerSupport++;
-                    tvPlayerSupport.setText((playerSupport )+"");
-                    // TODO refresh all info on cell activity
+                    XPTriggers xp = new XPTriggers(sharedpreferences.getInt("user_id", 0), sharedpreferences.getInt("level", 1));
+                    xp.addSupport();
+
+                    Toast.makeText(getApplicationContext(), "+25xp \t support added", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "You have no supporters to add", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Not enough available supporters.", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
     }
+
+
+
+    private Runnable r = new Runnable() {
+        @Override
+        public void run() {
+
+            if (!supportCanvas.done)
+            {
+                // draw
+                supportCanvas.invalidate();
+                h.postDelayed(r, FRAME_RATE);
+            }
+            else
+            {
+                h.removeCallbacks(r);
+            }
+        }
+    };
+
 
     private void finishWithResult(int supportEarned)
     {

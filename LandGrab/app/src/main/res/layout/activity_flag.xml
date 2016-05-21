@@ -2,7 +2,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/textView"
+    android:layout_below="@+id/tvUsername"
     android:layout_toRightOf="@+id/btnMap"
     android:layout_toEndOf="@+id/btnMap">
 
@@ -20,7 +20,7 @@
 
     <TextView android:text="Draw Your Flag" android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/tvUsername"
         android:layout_gravity="center_horizontal"
         android:textColor="#00ffff"
         android:textSize="26dp"

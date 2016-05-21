@@ -18,6 +18,9 @@ public class ObjectManager
 
     // data
     public int user_id;
+    public int level;
+    public int xp;
+    public int playerPower = 0;
     public ArrayList<Cell> cells = new ArrayList<>();
     public ArrayList<CellSupport> cellSupporters = new ArrayList<>();
 
@@ -25,6 +28,11 @@ public class ObjectManager
     {
         dbUser.login(user, pass);
         waitingForLoginToLoad = true;
+    }
+
+    public void addXP()
+    {
+
     }
 
     public boolean loginComplete()
@@ -43,22 +51,27 @@ public class ObjectManager
         }
     }
 
-    public void loadCells(double lat, double lng)
+    public void loadMapData(double lat, double lng, String username)
     {
         dbCell.loadCellsInArea(lat, lng);
+        dbUser.getStats(username);
         waitingForCellsToLoad = true;
     }
 
     public boolean loadComplete()
     {
-        if (dbCell.loadCellsComplete)
+        if (dbCell.loadCellsComplete && dbUser.powerCompletebool)
         {
 
             cells = dbCell.cells;
             cellSupporters = dbCell.supports;
+            playerPower = dbUser.power;
+            level = dbUser.level;
+            xp = dbUser.xp;
 
             waitingForCellsToLoad = false;
             dbCell.loadCellsComplete = false;
+            dbUser.powerCompletebool = false;
             return true;
         }
         else

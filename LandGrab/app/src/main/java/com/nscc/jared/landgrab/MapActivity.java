@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +51,12 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.nscc.jared.biz.CellSupport;
+import com.nscc.jared.biz.FlagCanvas;
+import com.nscc.jared.biz.XPCanvas;
 import com.nscc.jared.data.AsyncResponse;
 import com.nscc.jared.data.ObjectManager;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Console;
@@ -63,6 +68,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -97,17 +103,29 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private LinearLayout lyInfoView;
     private Button btnOkay;
     private Button btnAbout;
-    private Button btnZoom1;
-    private Button btnZoom2;
+    private Button btnToggleZoom;
     private TextView tvSupporters;
-    private Button btnEdit;
-    private Button btnFlag;
+    private TextView tvUserPower;
+    private Button btnMenu;
+    private Button btnCloseMenu;
+    private LinearLayout lyMenu;
+    private Button btnProfile;
+    private TextView tvLevel;
+
+    private XPCanvas xpCanvas;
+
+    // chat stuff
+    private LinearLayout lyCommsContent;
+    private Button btnComms;
+    private ListView lvChatList;
 
     public String username = "";
     private ObjectManager objects = new ObjectManager();
 
     private ArrayList<Marker> cellMarkers = new ArrayList<>();
     private ArrayList<Polygon> cellShapes = new ArrayList<>();
+
+    private int easterEggCount = 0;
 
     private float currentZoom = 17.0f;
 
@@ -136,7 +154,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     @Override
     protected void onResume() {
         super.onResume();
-
+        easterEggCount = 0;
         //if (mapAnimation != null)
         //mapAnimation.start();
 
@@ -158,8 +176,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "onResume() - cannot rerefrsh data. no location.", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "onResume() - cannot rerefrsh data. no location.", Toast.LENGTH_SHORT).show();
         }
+
+        lyMenu.setVisibility(View.GONE);
     }
 
     @Override
@@ -184,11 +204,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         lyInfoView = (LinearLayout) findViewById(R.id.lyInfoView);
         btnOkay = (Button) findViewById(R.id.btnOkay);
         btnAbout = (Button) findViewById(R.id.btnAbout);
-        btnZoom1 = (Button) findViewById(R.id.btnZoom1);
-        btnZoom2 = (Button) findViewById(R.id.btnZoom2);
+        btnToggleZoom = (Button) findViewById(R.id.btnToggleZoom);
         tvSupporters = (TextView) findViewById(R.id.tvSupporters);
-        btnEdit = (Button) findViewById(R.id.btnEdit);
-        btnFlag = (Button) findViewById(R.id.btnFlag);
+        tvUserPower = (TextView) findViewById(R.id.tvUserPower);
+        btnMenu = (Button) findViewById(R.id.btnMenu);
+        btnCloseMenu = (Button) findViewById(R.id.btnCloseMenu);
+        tvLevel = (TextView) findViewById(R.id.tvLevel);
+
+        xpCanvas = (XPCanvas) findViewById(R.id.xpCanvas);
+
+        // menu
+        lyMenu = (LinearLayout) findViewById(R.id.MenuLayout);
+        btnProfile = (Button) findViewById(R.id.btnProfile);
+
+
+        btnComms = (Button) findViewById(R.id.btnComms);
+        lyCommsContent = (LinearLayout) findViewById(R.id.CommContent);
+        lvChatList = (ListView) findViewById(R.id.lvChatList);
 
         tvUsername.setText(sharedpreferences.getString("username", "error. restart app"));
 
@@ -199,6 +231,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         tvloading.setVisibility(View.VISIBLE);
         grey_out = true;
+
+        loadChat();
 
         btnOkay.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -215,72 +249,91 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             }
         });
 
-        btnFlag.setOnClickListener(new View.OnClickListener() {
+        btnMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent("FlagActivity"));
+                lyMenu.setVisibility(View.VISIBLE);
             }
         });
 
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        btnCloseMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent("SetupActivity"));
+                lyMenu.setVisibility(View.GONE);
             }
         });
 
-        btnZoom1.setOnClickListener(new View.OnClickListener() {
+        btnProfile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (map != null && userLocation != null) {
-                    currentZoom = 15.0f;
-                    LatLng currentPosition = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-                    CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(currentPosition, currentZoom);
-                    map.moveCamera(yourLocation);
+                startActivity(new Intent("ProfileActivity"));
+            }
+        });
 
-                    btnZoom1.setBackgroundColor(Color.parseColor("#3399ff"));
-                    btnZoom1.setTextColor(Color.parseColor("#000000"));
-
-                    btnZoom2.setBackgroundColor(Color.parseColor("#000099"));
-                    btnZoom2.setTextColor(Color.parseColor("#ffffff"));
-
-                    for (int c = 0; c < cellMarkers.size(); c++) {
-                        cellMarkers.get(c).setVisible(false);
-                    }
+        btnComms.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (lyCommsContent.getVisibility() == View.GONE)
+                {
+                    lyCommsContent.setVisibility(View.VISIBLE);
+                    Toast.makeText(getApplicationContext(), "*slides up* ** whoosh **", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    lyCommsContent.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "*slides down* ** whoosh **", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        btnZoom2.setOnClickListener(new View.OnClickListener() {
+        btnToggleZoom.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (map != null && userLocation != null) {
-                    currentZoom = 17.0f;
+                    if (currentZoom == 15.0f)
+                    {
+                        currentZoom = 17.0f;
+                        for (int c = 0; c < cellMarkers.size(); c++) {
+                            cellMarkers.get(c).setVisible(true);
+                        }
+                    }
+                    else
+                    {
+                        currentZoom = 15.0f;
+                        for (int c = 0; c < cellMarkers.size(); c++) {
+                            cellMarkers.get(c).setVisible(false);
+                        }
+                    }
                     LatLng currentPosition = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                     CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(currentPosition, currentZoom);
                     map.moveCamera(yourLocation);
 
-                    btnZoom2.setBackgroundColor(Color.parseColor("#3399ff"));
-                    btnZoom2.setTextColor(Color.parseColor("#000000"));
-
-                    btnZoom1.setBackgroundColor(Color.parseColor("#000099"));
-                    btnZoom1.setTextColor(Color.parseColor("#ffffff"));
-
-                    for (int c = 0; c < cellMarkers.size(); c++) {
-                        cellMarkers.get(c).setVisible(true);
-                    }
                 }
             }
         });
+
+
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void loadChat()
+    {
+        ArrayList<String> message = new ArrayList<>();
+        message.add("Drew:Wouldn't it be nice to chat");
+        message.add("Bob:Well you will be able to here soon");
+        message.add("Alice:Yay!");
 
-        if (requestCode == CELL_ACTIVITY) {
-            if (resultCode == RESULT_OK) {
-                Bundle res = data.getExtras();
-                int newSupport = res.getInt("newSupport", 0);
-                Toast.makeText(getApplicationContext(), newSupport + " new supporters", Toast.LENGTH_SHORT).show();
-            }
+        // the list adapater needs a array the size of the list
+        String[] test= new String[message.size()];
+
+        ChatListAdapter adapter = new ChatListAdapter(MapActivity.this, message, test);
+        lvChatList.setAdapter(adapter);
+    }
+
+    public void SupportersOnClick(View v) {
+        easterEggCount++;
+        if (easterEggCount == 10)
+        {
+            int currentSupporter = sharedpreferences.getInt("supporters", 0);
+            SharedPreferences.Editor editor2 = sharedpreferences.edit();
+            editor2.putInt("supporters", currentSupporter + 100);
+            editor2.apply();
+            Toast.makeText(getApplicationContext(), "+ 100 supporters", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -380,7 +433,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onMapClick(LatLng clickCoords) {
 
-                Toast.makeText(getApplicationContext(), clickCoords.latitude + ", " + clickCoords.longitude, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), clickCoords.latitude + ", " + clickCoords.longitude, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -388,10 +441,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void RefreshAllData(double lat, double lng)
     {
         lastRefreshLocation = userLocation;
-        tvSupporters.setText(sharedpreferences.getInt("supporters", 0) + " supporters");
+        tvSupporters.setText(sharedpreferences.getInt("supporters", 0) + " available supporters");
 
         DecimalFormat df = new DecimalFormat("#.###");
-        objects.loadCells(Double.parseDouble(df.format(lat)), Double.parseDouble(df.format(lng)));
+        objects.loadMapData(Double.parseDouble(df.format(lat)), Double.parseDouble(df.format(lng)), tvUsername.getText().toString());
 
         h.postAtTime(checkForLoad, SystemClock.uptimeMillis() + 400);
     }
@@ -402,7 +455,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             if (objects.waitingForCellsToLoad)
             {
                 if (objects.loadComplete())
+                {
                     drawCells();
+
+                    SharedPreferences.Editor editor2 = sharedpreferences.edit();
+                    editor2.putInt("level", objects.level);
+                    editor2.apply();
+
+                    tvLevel.setText("L " + objects.level);
+                    tvUserPower.setText("C " + objects.playerPower);
+                    xpCanvas.xp = objects.xp;
+                    xpCanvas.level = objects.level;
+                    xpCanvas.invalidate();
+                }
+
                 h.postDelayed(checkForLoad, FRAME_RATE);
             }
             else
@@ -428,8 +494,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         if (userLocation != null)
         {
-
-
             DecimalFormat df = new DecimalFormat("#.###");
             double lat = Double.parseDouble(df.format(userLocation.getLatitude()));
             double lng = Double.parseDouble(df.format(userLocation.getLongitude()));
@@ -534,28 +598,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         return false;
     }
 
-    // create file to write new image to
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        // public gallery folder
-        //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        // private to the app storage
-        File storageDir = getExternalFilesDir(null);
-
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
     class LocationUpdateListener implements LocationListener
     {
@@ -570,7 +612,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             // check location accuracy
             float acc = location.getAccuracy();
-            if (acc > 50f)
+            if (acc > 80f)
             {
                 tvloading.setVisibility(View.VISIBLE);
                 grey_out = true;

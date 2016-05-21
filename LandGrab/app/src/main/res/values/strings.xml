@@ -18,4 +18,5 @@
     <string name="title_activity_flag">FlagActivity</string>
 
     <dimen name="usernameFontSize">20sp</dimen>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

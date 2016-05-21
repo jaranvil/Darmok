@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/tvUsername"
+    android:layout_toRightOf="@+id/btnMap"
+    android:layout_toEndOf="@+id/btnMap">
+
+    <TextView android:text="Username" android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tvUsername"
+        android:layout_gravity="center"
+        android:textColor="#00ffff"
+        android:textSize="26dp"
+        android:background="#444444"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:text="Setup"
+                android:id="@+id/btnRecruit"
+                android:background="#888888" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:text="Edit Flag"
+                android:id="@+id/btnAddSupport"
+                android:background="#00ffff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:id="@+id/button2"
+                android:background="#888888"
+                android:text="Logout" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

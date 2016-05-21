@@ -28,12 +28,23 @@ public class UserDataAccess {
     static InputStream is = null;
 
     public boolean loginComplete = false;
+    public boolean powerCompletebool = false;
     public int id;
+    public int power = 0;
+    public int level = 1;
+    public int xp = 0;
 
     public void setupUser(int user_id, String name, String color)
     {
         SetupUser task = new SetupUser();
         String[] params = {Integer.toString(user_id), name, color};
+        task.execute(params);
+    }
+
+    public void updateUser(int user_id, int amount, int max)
+    {
+        UpdateUser task = new UpdateUser();
+        String[] params = {Integer.toString(user_id), Integer.toString(amount), Integer.toString(max)};
         task.execute(params);
     }
 
@@ -49,6 +60,21 @@ public class UserDataAccess {
        id = Integer.parseInt(token);
        loginComplete = true;
    }
+
+    public void getStats(String user)
+    {
+        GetUserPower task = new GetUserPower();
+        String[] params = {user};
+        task.execute(params);
+    }
+
+    public void statsComplete(String power, String level, String xp)
+    {
+        this.power = Integer.parseInt(power);
+        this.level = Integer.parseInt(level);
+        this.xp = Integer.parseInt(xp);
+        powerCompletebool = true;
+    }
 
     //                                           Param, Progress, Return
     private class LoginUser extends AsyncTask<String, Void, String> {
@@ -167,5 +193,121 @@ public class UserDataAccess {
         }
     }
 
+    //                                           Param, Progress, Return
+    private class GetUserPower extends AsyncTask<String, Void, String> {
+
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String id = "";
+            // Making HTTP request
+            try {
+                // defaultHttpClient
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("http://www.jaredeverett.ca/darmok/Android_API/getUserPower.php");
+
+                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+                nameValuePair.add(new BasicNameValuePair("username", params[0]));
+
+                try {
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                is.close();
+                id = sb.toString();
+            } catch (Exception e) {
+                Log.e("Buffer Error", "Error converting result " + e.toString());
+            }
+            return id;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            String[] data = s.split(":");
+            statsComplete(data[0], data[1], data[2]);
+        }
+    }
+
+    //                                           Param, Progress, Return
+    private class UpdateUser extends AsyncTask<String, Void, String> {
+
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String id = "";
+            // Making HTTP request
+            try {
+                // defaultHttpClient
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("http://www.jaredeverett.ca/darmok/Android_API/updateUser.php");
+
+                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+                nameValuePair.add(new BasicNameValuePair("user_id", params[0]));
+                nameValuePair.add(new BasicNameValuePair("xp", params[1]));
+                nameValuePair.add(new BasicNameValuePair("xpMax", params[2]));
+
+                try {
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                is.close();
+                id = sb.toString();
+            } catch (Exception e) {
+                Log.e("Buffer Error", "Error converting result " + e.toString());
+            }
+            return id;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
+    }
 
 }
