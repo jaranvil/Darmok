@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Darmok</title>
+
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/freelancer.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    
+    
+</head>
+
+<body class="main_section">
+
+
+
+
+    <div class="row top_bar">
+        <div class="col-sm-6">
+            <img src="img/logo.png" style="padding:5px;">
+        </div>
+
+        <div class="col-sm-6 nav_bar">
+            <a href="map.php" class="nav_btn">Dashboard</a>                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;            
+            <a href="download.html" class="nav_btn">Download App</a>                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="about.html" class="nav_btn">About</a>                              &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;            
+            <a href="login.html" class="nav_btn" style="padding-left 40px">Login</a>    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+        
+<!--
+        <form action="map.php" method="post">
+            <div class="col-sm-2">
+                <input type="text" class="login_input" name="username" placeholder="Username">
+            </div>
+            <div class="col-sm-2">
+                <input type="password" class="login_input" name="password" placeholder="Password">
+            </div>
+            <div class="col-sm-1">
+                <input class="login_btn" type="submit" value="Login">  
+            </div>
+
+        </form>
+-->
+
+        
+    </div>
+
+    <div class="row sub_nav_bar">
+        <div class="col-sm-12">
+            <center><span class="subtitle">Web View</span></center>
+        </div>
+    </div>
+
+
+    <div>
+        <div class="row" >
+            <div class="col-sm-3">
+                <h3 class="title">Governments</h3>
+                <div class="gov_sidebar">
+
+<!--                    hide then logged in-->
+                    <div class="col-sm-12 login_notice_span">
+                        <center><span class="login_notice">Login to view local governments</span></center>                    
+                    </div>
+                    
+                    
+<!--
+                    <div class="gov_list_item">
+                        <span class="gov_title">Test Government 1</span>
+
+                    </div>
+-->
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h3 class="title">Territories</h3>
+                <div id="map" style="height: 700px; border: solid 1px yellow"></div>
+            </div>
+            <div class="col-sm-3">
+                <h3 class="title">Communication</h3>
+                <div class="chat_sidebar">
+                    
+<!--                    hide then logged in-->
+                    <div class="col-sm-12 login_notice_span">
+                        <center><span class="login_notice">Login to access chat</span></center>                    
+                    </div>
+                    
+                    
+                    <div class="chat_output">
+
+                    </div>
+
+                    <div class="chat_input">
+                        <input type="text" class="text_input" placeholder="Enter message" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row real_footer">
+            footer
+        </div>
+    </div>
+    
+
+
+
+
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <script src="js/login_check.js"></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/freelancer.js"></script>
+    
+    <script src="js/infobubble.js"></script>
+    <script src="js/script.js"></script>
+    
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_oZMVy8xckikqAFOoueG455dUkzz8vaA&callback=initMap"
+        async defer></script>
+
+</body>
+
+</html>
