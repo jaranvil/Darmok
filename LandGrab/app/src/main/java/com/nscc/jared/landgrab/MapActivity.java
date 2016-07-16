@@ -284,7 +284,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         btnToggleZoom.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (map != null && userLocation != null) {
+                if (map != null && userLocation != null)
+                {
 
                     if (currentZoom == 15.0f) // zoomed out
                     {
@@ -299,19 +300,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     }
                     else
                     {
+                        for (int c = 0; c < cellMarkers.size(); c++)
+                        {
+                            cellMarkers.get(c).setVisible(false);
+                    }
+
                         currentZoom = 15.0f;
                         LatLng currentPosition = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                         CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(currentPosition, currentZoom);
                         map.moveCamera(yourLocation);
-
-                        for (int c = 0; c < cellMarkers.size(); c++)
-                        {
-                            cellMarkers.get(c).setVisible(false);
-                        }
                     }
-
-
-
 
                 }
             }
