@@ -37,8 +37,21 @@ function drawCells()
         var ownerIndex = 0;
         for (var c = 0;c < cellSupporters.length;c++)
         {
-            if (cellSupporters[c][1] > cellSupporters[ownerIndex][1])
+            var userSupport = Number(cellSupporters[c][1]);
+            var currentOwnerSupport = Number(cellSupporters[ownerIndex][1]);
+            
+            if (cellSupporters[c][0] == 330)
+                alert(userSupport + " " + currentOwnerSupport);
+            
+            if (userSupport > currentOwnerSupport)
+            {
                 ownerIndex = c;
+                if (cellSupporters[c][0] == 330)
+                {
+                    alert(cellSupporters[c][6] + " " + cellSupporters[c][2]);
+                }
+            }
+                
         }
         
         var color = '#ffffff';
@@ -60,8 +73,8 @@ function drawCells()
             bounds: {
               north: Number(cellArr[i][1]),
               south: Number(cellArr[i][1]) + Number(cellSize),
-              east: Number(cellArr[i][2]) + Number(cellSize),
-              west: Number(cellArr[i][2])
+              east: Number(cellArr[i][2]),
+              west: Number(cellArr[i][2]) - Number(cellSize)
             }
           });
 
@@ -114,15 +127,16 @@ function showCellInfo(event)
     var clickLng = trimNumber(event.latLng.lng());
     var content = "<div style='color:#ffffff'>";
     
-    alert(event.latLng.lat() + ", " + event.latLng.lng() + " : " + clickLat + ", " + clickLng);
+    //alert(event.latLng.lat() + ", " + event.latLng.lng() + " : " + clickLat + ", " + clickLng);
     
     var supporters = Array();
     
     supporters = getCellSupporters(clickLat, clickLng);
     
+    content += clickLat + ", " + clickLng + "<p>";
    for (var i = 0;i < supporters.length;i++)
    {
-       content += supporters[i][6] + "<p>";
+       content += supporters[i][6] + " <span style='flost:right;'" + supporters[i][1] + "</span><p>";
    }
     
     content += "</div>";

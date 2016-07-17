@@ -134,6 +134,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private boolean loading = true;
     private boolean grey_out = true;
 
+
     // Stores the thumbnail captured by the user
     // holding onto it while waiting for confirmation actvivity
     //private Bitmap photo;
