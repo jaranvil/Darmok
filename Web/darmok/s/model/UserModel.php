@@ -1,8 +1,9 @@
 <?php
 require_once '../model/User.php';
+require_once '../model/Location.php';
 require_once '../model/data/UserDataModel.php';
 
-class AuthModel 
+class UserModel 
 {
     private $m_DataAccess;
     
@@ -36,6 +37,16 @@ class AuthModel
         return $user;
     }
     
+    public function getLocation($token)
+    {
+        $this->m_DataAccess->connectToDB();                
+        $row =  $this->m_DataAccess->getLocation($token);               
+        $this->m_DataAccess->closeDB();
+        
+        $location = new Location($row["lat"], $row["lng"]);
+        
+        return $location;
+    }
     
 //    
 //    public function getCustomer($custID)

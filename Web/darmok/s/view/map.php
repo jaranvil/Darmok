@@ -34,6 +34,10 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </head>
   <body style="height:100%;">
+    <div style="display:none">
+        <span id="lat"><?php echo $location->getLat(); ?></span>  
+        <span id="lng"><?php echo $location->getLng(); ?></span>  
+    </div>
     <div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -78,7 +82,7 @@
                 </div>
                 <div class="user_info">
                     <h3 style="margin-bottom:0px"><?php  echo $user->getName();  ?></h3>
-                    <span style="color:orange"><?php echo $user->getUsername(); ?></span>
+                    <span style="color:orange"><?php echo $user->getUsername();  ?></span>
                 </div>
                 
             </div>

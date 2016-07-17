@@ -1,20 +1,21 @@
 <?php
 
-require_once('../model/AuthModel.php');
+require_once('../model/UserModel.php');
 
 class MainController 
 {
-    public $auth;
+    public $userModel;
     
     public function __construct()
     {
-        $this->auth = new AuthModel();
+        $this->userModel = new UserModel();
     }
     
     public function displayMap($token)
     {
-            $user = $this->auth->getUser($token);
-            include '../view/map.php';
+        $user = $this->userModel->getUser($token);
+        $location = $this->userModel->getLocation($token);
+        include '../view/map.php';
     }
     
     public function displayLogin()
@@ -24,7 +25,7 @@ class MainController
     
     public function login($username, $password)
     {
-        $token = $this->auth->getToken($username, $password);
+        $token = $this->userModel->getToken($username, $password);
         
         if ($token == 0)        
         {

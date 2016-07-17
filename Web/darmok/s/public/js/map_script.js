@@ -239,8 +239,15 @@ function loadCells()
 
 function initMap() 
 {
-    
+    var lat = $("#lat").text();
+    var lng = $("#lng").text();
    
+    if (lat.length > 1)
+    {
+        centerLat = Number(lat);
+        centerLng = Number(lng);
+    }
+    
    // alert(token);
     
       // Specify features and elements to define styles.
@@ -303,6 +310,7 @@ function initMap()
     
     map.addListener('bounds_changed', function() 
     {
+        
         // get center of map
         centerLat = map.getCenter().lat().toFixed(3);
         centerLng = map.getCenter().lng().toFixed(3);

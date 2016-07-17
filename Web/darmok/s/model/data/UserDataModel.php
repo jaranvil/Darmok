@@ -62,6 +62,28 @@ class UserDataModel
         $result = @$this->dbConnection->query($query);
         return $result->fetch_array();        
     }
+    
+    public function getLocation($token)
+    {
+        $query = "SELECT s.cell_id FROM CellSupport AS s WHERE user_id = (SELECT id FROM Users WHERE user_id = '".$this->dbEsc($token)."') LIMIT 1";
+        $result = @$this->dbConnection->query($query);
+        $row = $result->fetch_array();
+        $cell_id = $row['cell_id'];
+                  
+        $query = "SELECT lat, lng FROM Cell WHERE id = " . $cell_id;
+        $result = @$this->dbConnection->query($query);
+        
+        if ($result == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return $result->fetch_array();            
+        }
+        
+        
+    }
 }
 
 ?>
